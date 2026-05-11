@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loja Moderna</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-dark: #0ea5e9;
+      --shadow: 0 18px 50px rgba(15, 23, 42, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      background: radial-gradient(circle at top, rgba(56, 189, 248, 0.15), transparent 30%),
+        linear-gradient(180deg, #020617 0%, #0f172a 100%);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(1200px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 2rem 0 4rem;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .brand {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    nav a:hover {
+      color: var(--text);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: center;
+      margin-bottom: 4rem;
+    }
+
+    .hero-content h1 {
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      margin-bottom: 1rem;
+      max-width: 36rem;
+    }
+
+    .hero-content p {
+      color: var(--muted);
+      max-width: 30rem;
+      margin-bottom: 2rem;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: #fff;
+      padding: 1rem 1.8rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 15px 35px rgba(56, 189, 248, 0.25);
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(56, 189, 248, 0.25);
+    }
+
+    .card img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-desc {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .price {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .buy {
+      background: var(--accent);
+      color: #0f172a;
+      border: none;
+      border-radius: 999px;
+      padding: 0.8rem 1.2rem;
+      cursor: pointer;
+      font-weight: 700;
+      text-transform: uppercase;
+      transition: background 0.2s ease;
+    }
+
+    .buy:hover {
+      background: var(--accent-dark);
+    }
+
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .feature {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(148, 163, 184, 0.14);
+      border-radius: 16px;
+      padding: 1rem 1.2rem;
+      flex: 1 1 200px;
+    }
+
+    .feature h2 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .hero img {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      nav a {
+        margin-left: 0;
+        margin-right: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">Vendas Pro</div>
+      <nav>
+        <a href="#produtos">Produtos</a>
+        <a href="#destaques">Destaques</a>
+        <a href="#contato">Contato</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Loja moderna e sofisticada para suas compras online</h1>
+        <p>Encontre os melhores produtos com design premium, entrega rápida e preços competitivos. Escolha seu próximo item favorito na nossa seleção.</p>
+        <a href="#produtos" class="cta">Ver Produtos</a>
+      </div>
+      <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=900&q=80" alt="Produtos modernos" />
+    </section>
+
+    <section id="produtos" class="gallery">
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=900&q=80" alt="Fone de ouvido premium" />
+        <div class="card-body">
+          <h3 class="card-title">Fone de Ouvido Premium</h3>
+          <p class="card-desc">Som envolvente, design ergonômico e cancelamento de ruído ativo para usar o dia todo.</p>
+          <div class="price-row">
+            <span class="price">R$ 499,00</span>
+            <button class="buy">Comprar</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1555617117-08ee32a44e67?auto=format&fit=crop&w=900&q=80" alt="Relógio de pulso" />
+        <div class="card-body">
+          <h3 class="card-title">Relógio Smart</h3>
+          <p class="card-desc">Monitoramento de saúde, notificações e estilo contemporâneo para o seu pulso.</p>
+          <div class="price-row">
+            <span class="price">R$ 749,00</span>
+            <button class="buy">Comprar</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=900&q=80" alt="Mochila moderna" />
+        <div class="card-body">
+          <h3 class="card-title">Mochila Urbana</h3>
+          <p class="card-desc">Capacidade inteligente, compartimentos para laptop e acabamento resistente à água.</p>
+          <div class="price-row">
+            <span class="price">R$ 189,00</span>
+            <button class="buy">Comprar</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80" alt="Acessórios de tecnologia" />
+        <div class="card-body">
+          <h3 class="card-title">Kit de Acessórios</h3>
+          <p class="card-desc">Carregador rápido, cabo premium e suporte elegante para seu home office.</p>
+          <div class="price-row">
+            <span class="price">R$ 129,00</span>
+            <button class="buy">Comprar</button>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section id="destaques" class="features">
+      <div class="feature">
+        <h2>Entrega rápida</h2>
+        <p>Envio em até 24 horas para todo o Brasil com rastreamento completo.</p>
+      </div>
+      <div class="feature">
+        <h2>Design exclusivo</h2>
+        <p>Produtos selecionados com acabamento premium e estilo contemporâneo.</p>
+      </div>
+      <div class="feature">
+        <h2>Suporte 24/7</h2>
+        <p>Atendimento rápido para tirar dúvidas e ajudar na sua compra.</p>
+      </div>
+    </section>
+  </div>
+
+  <footer id="contato" style="text-align:center; padding:2rem 0; color:var(--muted);">
+    <p>© 2026 Vendas Pro. Todos os direitos reservados.</p>
+  </footer>
+</body>
+</html>

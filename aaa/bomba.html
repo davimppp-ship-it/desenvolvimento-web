@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bisca - Jogo de Baralho</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: #0d5f3f;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            max-width: 900px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffd700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: #fff;
+            border: 2px solid #ffd700;
+            text-align: center;
+        }
+
+        .info-box strong {
+            color: #ffd700;
+        }
+
+        .game-area {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .player-zone, .computer-zone {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #ffd700;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .zone-title {
+            color: #ffd700;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .cards-display {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            min-height: 150px;
+        }
+
+        .card {
+            width: 80px;
+            height: 120px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            user-select: none;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .card.red {
+            color: #e31c23;
+        }
+
+        .card.black {
+            color: #000;
+        }
+
+        .card.back {
+            background: linear-gradient(45deg, #1a5490 0%, #2a7fb8 100%);
+            border: 2px solid #0d3d5c;
+            color: #ffd700;
+            font-size: 24px;
+        }
+
+        .deck {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .deck-item {
+            text-align: center;
+        }
+
+        .deck-info {
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .trump-card {
+            margin-top: 10px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #ffd700;
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background: #ffed4e;
+            transform: scale(1.05);
+        }
+
+        .btn-primary:disabled {
+            background: #999;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+
+        .btn-secondary {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #ff8787;
+        }
+
+        .message {
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.info {
+            background: #4a90e2;
+            color: white;
+        }
+
+        .message.success {
+            background: #7cb342;
+            color: white;
+        }
+
+        .message.error {
+            background: #e53935;
+            color: white;
+        }
+
+        .scores {
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .score-board {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: #fff;
+            text-align: center;
+            border: 2px solid #ffd700;
+        }
+
+        .score-board div {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>♠️ BISCA ♠️</h1>
+
+        <div class="game-info">
+            <div class="info-box">
+                <strong>Status:</strong> <span id="status">Preparando...</span>
+            </div>
+            <div class="info-box">
+                <strong>Cartas no Baralho:</strong> <span id="deck-count">40</span>
+            </div>
+            <div class="info-box">
+                <strong>Rodada:</strong> <span id="round">0</span>
+            </div>
+        </div>
+
+        <div class="game-area">
+            <div class="player-zone">
+                <div class="zone-title">🎮 Seu Jogo</div>
+                <div class="cards-display" id="player-cards"></div>
+            </div>
+
+            <div class="deck">
+                <div class="deck-item">
+                    <div class="deck-info">Trunfo:</div>
+                    <div id="trump-card" class="cards-display trump-card"></div>
+                </div>
+                <div class="deck-item">
+                    <div class="deck-info">Baralho</div>
+                    <div class="card back" id="deck-cards">🂠</div>
+                </div>
+            </div>
+
+            <div class="computer-zone">
+                <div class="zone-title">🤖 IA (Bisca)</div>
+                <div class="cards-display" id="computer-cards"></div>
+            </div>
+        </div>
+
+        <div class="scores">
+            <div class="score-board">
+                <div>Você: <span id="player-score">0</span></div>
+            </div>
+            <div class="score-board">
+                <div>IA: <span id="computer-score">0</span></div>
+            </div>
+            <div class="score-board">
+                <div>Empates: <span id="draws">0</span></div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn-primary" id="start-btn" onclick="startGame()">Iniciar Jogo</button>
+            <button class="btn-primary" id="reset-btn" onclick="resetGame()">Novo Jogo</button>
+            <button class="btn-secondary" id="help-btn" onclick="showHelp()">Ajuda</button>
+        </div>
+
+        <div class="message" id="message"></div>
+    </div>
+
+    <script>
+        const SUITS = ['♠', '♥', '♦', '♣'];
+        const VALUES = ['A', '2', '3', '4', '5', '6', '7', 'J', 'Q', 'K'];
+        const CARD_VALUES = {
+            'A': 11,
+            'K': 4,
+            'Q': 3,
+            'J': 2,
+            '7': 1
+        };
+
+        let deck = [];
+        let playerHand = [];
+        let computerHand = [];
+        let playerScore = 0;
+        let computerScore = 0;
+        let draws = 0;
+        let trumpCard = null;
+        let gameActive = false;
+        let round = 0;
+
+        function createDeck() {
+            const newDeck = [];
+            for (let suit of SUITS) {
+                for (let value of VALUES) {
+                    newDeck.push({ value, suit });
+                }
+            }
+            return newDeck.sort(() => Math.random() - 0.5);
+        }
+
+        function getCardColor(suit) {
+            return (suit === '♥' || suit === '♦') ? 'red' : 'black';
+        }
+
+        function getCardPoints(card) {
+            return CARD_VALUES[card.value] || 0;
+        }
+
+        function formatCard(card) {
+            return `${card.value}${card.suit}`;
+        }
+
+        function renderPlayerCards() {
+            const container = document.getElementById('player-cards');
+            container.innerHTML = '';
+            playerHand.forEach((card, index) => {
+                const cardEl = document.createElement('div');
+                cardEl.className = `card ${getCardColor(card.suit)}`;
+                cardEl.textContent = formatCard(card);
+                cardEl.onclick = () => playCard(index);
+                cardEl.style.cursor = gameActive ? 'pointer' : 'default';
+                container.appendChild(cardEl);
+            });
+        }
+
+        function renderComputerCards() {
+            const container = document.getElementById('computer-cards');
+            container.innerHTML = '';
+            computerHand.forEach((card) => {
+                const cardEl = document.createElement('div');
+                cardEl.className = 'card back';
+                cardEl.textContent = '🂠';
+                container.appendChild(cardEl);
+            });
+        }
+
+        function renderTrumpCard() {
+            const container = document.getElementById('trump-card');
+            container.innerHTML = '';
+            if (trumpCard) {
+                const cardEl = document.createElement('div');
+                cardEl.className = `card ${getCardColor(trumpCard.suit)}`;
+                cardEl.textContent = formatCard(trumpCard);
+                container.appendChild(cardEl);
+            }
+        }
+
+        function updateUI() {
+            renderPlayerCards();
+            renderComputerCards();
+            renderTrumpCard();
+            document.getElementById('player-score').textContent = playerScore;
+            document.getElementById('computer-score').textContent = computerScore;
+            document.getElementById('draws').textContent = draws;
+            document.getElementById('deck-count').textContent = deck.length;
+            document.getElementById('round').textContent = round;
+        }
+
+        function dealCards() {
+            while (playerHand.length < 3 && deck.length > 0) {
+                playerHand.push(deck.pop());
+            }
+            while (computerHand.length < 3 && deck.length > 0) {
+                computerHand.push(deck.pop());
+            }
+        }
+
+        function playCard(index) {
+            if (!gameActive) return;
+
+            const card = playerHand[index];
+            playerHand.splice(index, 1);
+            round++;
+
+            showMessage(`Você jogou: ${formatCard(card)}`, 'info');
+            
+            setTimeout(() => {
+                const computerCard = computerPlay();
+                const winner = determineWinner(card, computerCard);
+                
+                if (winner === 'player') {
+                    playerScore += getCardPoints(card) + getCardPoints(computerCard);
+                    showMessage('Você ganhou a rodada!', 'success');
+                } else if (winner === 'computer') {
+                    computerScore += getCardPoints(card) + getCardPoints(computerCard);
+                    showMessage('A IA ganhou a rodada!', 'error');
+                } else {
+                    draws++;
+                    showMessage('Empate!', 'info');
+                }
+
+                dealCards();
+                updateUI();
+
+                if (deck.length === 0 && playerHand.length === 0 && computerHand.length === 0) {
+                    endGame();
+                } else {
+                    gameActive = true;
+                }
+            }, 500);
+
+            gameActive = false;
+            updateUI();
+        }
+
+        function computerPlay() {
+            if (computerHand.length === 0) return null;
+            const index = Math.floor(Math.random() * computerHand.length);
+            const card = computerHand[index];
+            computerHand.splice(index, 1);
+            showMessage(`IA jogou: ${formatCard(card)}`, 'info');
+            return card;
+        }
+
+        function determineWinner(playerCard, computerCard) {
+            if (playerCard.suit === computerCard.suit) {
+                return VALUES.indexOf(playerCard.value) > VALUES.indexOf(computerCard.value) ? 'player' : 'computer';
+            } else if (playerCard.suit === trumpCard.suit) {
+                return 'player';
+            } else if (computerCard.suit === trumpCard.suit) {
+                return 'computer';
+            }
+            return 'draw';
+        }
+
+        function startGame() {
+            if (gameActive) return;
+
+            deck = createDeck();
+            playerHand = [];
+            computerHand = [];
+            trumpCard = deck.pop();
+            playerScore = 0;
+            computerScore = 0;
+            draws = 0;
+            round = 0;
+            gameActive = true;
+
+            dealCards();
+            updateUI();
+            showMessage('Jogo iniciado! Clique em uma carta para jogar.', 'success');
+            document.getElementById('start-btn').textContent = 'Jogo em Andamento';
+            document.getElementById('start-btn').disabled = true;
+        }
+
+        function endGame() {
+            gameActive = false;
+            let message = '';
+            if (playerScore > computerScore) {
+                message = `Parabéns! Você venceu com ${playerScore} pontos!`;
+                showMessage(message, 'success');
+            } else if (computerScore > playerScore) {
+                message = `Que pena! A IA venceu com ${computerScore} pontos!`;
+                showMessage(message, 'error');
+            } else {
+                message = `Empate! Ambos com ${playerScore} pontos!`;
+                showMessage(message, 'info');
+            }
+            document.getElementById('start-btn').textContent = 'Iniciar Jogo';
+            document.getElementById('start-btn').disabled = false;
+        }
+
+        function resetGame() {
+            playerScore = 0;
+            computerScore = 0;
+            draws = 0;
+            round = 0;
+            gameActive = false;
+            deck = [];
+            playerHand = [];
+            computerHand = [];
+            trumpCard = null;
+            updateUI();
+            showMessage('Jogo resetado. Clique em "Iniciar Jogo" para começar.', 'info');
+            document.getElementById('start-btn').textContent = 'Iniciar Jogo';
+            document.getElementById('start-btn').disabled = false;
+        }
+
+        function showMessage(msg, type) {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = msg;
+            messageEl.className = `message show ${type}`;
+            setTimeout(() => {
+                messageEl.classList.remove('show');
+            }, 3000);
+        }
+
+        function showHelp() {
+            alert(`BISCA - Regras Básicas:
+            
+• Objetivo: Ganhar mais pontos que o oponente
+• Cada jogador recebe 3 cartas
+• O trunfo (naipe especial) é mostrado
+• Cartas têm valores: A=11, K=4, Q=3, J=2, 7=1
+
+Regras de jogo:
+• Quem tiver maior carta do mesmo naipe (ou trunfo) ganha
+• Se houver trunfo na mesa, ele vence
+• Vencedor leva os pontos das duas cartas
+
+Boa sorte!`);
+        }
+
+        // Inicializar UI
+        updateUI();
+    </script>
+</body>
+</html>
